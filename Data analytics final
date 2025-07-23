@@ -1,0 +1,41 @@
+import pandas as pd
+from scipy.stats import pearsonr
+import statsmodels.api as sm
+
+# Load the dataset
+df = pd.read_excel("OnePiece_TCG_Curated_Data_Expanded.xlsx")
+
+# Step 1: Clean column names
+df.columns = df.columns.str.strip()
+
+# Step 2: Drop rows with missing data
+df = df.dropna()
+
+# Step 3: Encode categorical variables
+df_encoded = pd.get_dummies(df, columns=['Rarity', 'PrintSize'], drop_first=True)
+
+# Step 4: Convert all to numeric just in case
+for col in df_encoded.columns:
+    df_encoded[col] = pd.to_numeric(df_encoded[col], errors='coerce')
+
+# Step 5: Correlation: Market Price vs Play Rate
+r_score, p_val = pearsonr(df_encoded['Market_Price'], df_encoded['PlayRate'])
+print("=== Correlation: Market Price vs. Play Rate ===")
+print(f"r = {r_score:.3f}, p = {p_val:.4f}, direction = {'positive' if r_score > 0 else 'negative'}\n")
+
+# Step 6: Prepare data for regression
+X = df_encoded.drop(columns=['Card Name', 'Market_Price'], errors='ignore')
+X = sm.add_constant(X)
+y = df_encoded['Market_Price']
+
+# Step 7: Convert everything to float and align
+X = X.astype(float)
+y = y.astype(float)
+X, y = X.align(y, join='inner', axis=0)
+
+# Step 8: Run regression
+model = sm.OLS(y, X).fit()
+
+# Step 9: Output regression summary
+print("=== Regression Summary ===")
+print(model.summary())
