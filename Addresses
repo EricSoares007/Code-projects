@@ -1,0 +1,19 @@
+# Collecting user input for the address components
+last_name = input("Enter last name: ").title()
+first_name = input("Enter first name: ").title()
+street_number = input("Enter street number: ")
+street_name = input("Enter street name: ").title()
+apartment_box = input("Enter apartment or PO Box number (leave blank if none): ").upper()
+city = input("Enter city: ").title()
+state = input("Enter state abbreviation (e.g., NJ): ").upper()
+zip_code = input("Enter 5-digit ZIP code: ")
+
+# Storing the elements into a tuple
+address_tuple = (last_name, first_name, street_number, street_name, apartment_box, city, state, zip_code)
+
+# Displaying the formatted address
+print(f"\n{address_tuple[0]}, {address_tuple[1]}")
+print(f"{address_tuple[2]} {address_tuple[3]}")
+if address_tuple[4]:  # Only print if apartment_box is provided
+    print(f"{address_tuple[4]}")
+print(f"{address_tuple[5]}, {address_tuple[6]} {address_tuple[7]}")
