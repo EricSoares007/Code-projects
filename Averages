@@ -1,0 +1,38 @@
+# Initialize variables to store sum and count of numbers
+sum_of_numbers = 0  # Stores the sum of all entered numbers
+count_of_numbers = 0  # Stores the count of numbers entered
+
+# Start an infinite loop to take user input
+while True:
+    user_input = input("Enter a number (or 'q' to quit): ")  # Get input from user
+    
+    # Check if user wants to quit
+    if user_input.lower() == 'q':  # If input is 'q' or 'Q', break the loop
+        break
+    
+    # Check if input is a valid number
+    is_valid_number = True
+    for char in user_input:
+        if char not in "0123456789.-":
+            is_valid_number = False
+            break
+    
+    if is_valid_number:
+        if user_input.count(".") > 1 or user_input.count("-") > 1 or ("-" in user_input and user_input[0] != "-"):
+            is_valid_number = False
+    
+    if is_valid_number:
+        number = float(user_input)  # Convert input to a floating-point number
+        sum_of_numbers += number  # Add number to sum
+        count_of_numbers += 1  # Increment count
+    else:
+        print("Invalid input. Please enter a valid number or 'q' to quit.")  # Handle non-numeric input
+
+# After exiting the loop, display results
+if count_of_numbers > 0:  # Ensure division by zero does not occur
+    average_of_numbers = sum_of_numbers / count_of_numbers  # Calculate average
+    print(f"The sum of the numbers entered is {sum_of_numbers}.")
+    print(f"The count of the numbers entered is {count_of_numbers}.")
+    print(f"The average of the numbers entered is {average_of_numbers}.")
+else:
+    print("No numbers were entered.")  # Handle case where user enters no numbers
